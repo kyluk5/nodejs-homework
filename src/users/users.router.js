@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const router = Router();
-const contacts = require("../../contacts");
+const { getContacts, getById } = require("./users.controller");
 
-router.get("/api/contacts", async (req, res, next) => {
-  res.status(200).send(await contacts.listContacts());
-});
+router.get("/api/contacts", getContacts);
+
+router.get("/api/contacts/:contactId", getById);
 
 exports.userRouter = router;
