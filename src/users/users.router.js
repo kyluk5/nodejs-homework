@@ -26,13 +26,17 @@ router.get("/api/contacts", getContacts);
 
 router.get("/api/contacts/:contactId", getById);
 
-router.post("/api/contacts", validate(createUserScheme), addNewContact);
+router.post(
+  "/api/contacts",
+  validate(createUserScheme, "missing required name field"),
+  addNewContact
+);
 
 router.delete("/api/contacts/:contactId", deleteContact);
 
 router.patch(
   "/api/contacts/:contactId",
-  validate(updataUserScheme),
+  validate(updataUserScheme, "missing fields"),
   changeContact
 );
 
