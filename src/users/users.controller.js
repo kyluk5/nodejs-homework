@@ -19,3 +19,25 @@ exports.addNewContact = async (req, res, next) => {
   await contacts.addContact(id, name, email, phone);
   res.status(201).send({ id, name, email, phone });
 };
+
+exports.deleteContact = async (req, res, next) => {
+  const contact = await contacts.getContactById(Number(req.params.contactId));
+  if (contact.length > 0) {
+    await contacts.removeContact(Number(req.params.contactId));
+    res.status(200).send("contact deleted");
+  } else {
+    res.status(404).send("Not found");
+  }
+};
+
+exports.changeContact = async (req, res, next) => {
+  const cangedContact = await contacts.updateContact(
+    Number(req.params.contactId),
+    req.body
+  );
+  if (cangedContact) {
+    res.status(200).send(cangedContact);
+  } else {
+    res.status(404).send("Not found");
+  }
+};
