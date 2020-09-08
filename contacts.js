@@ -29,8 +29,7 @@ async function removeContact(contactId) {
   }
 }
 
-async function addContact(name, email, phone) {
-  const id = JSON.parse(JSON.stringify(Date.now()).slice(9, 11));
+async function addContact(id, name, email, phone) {
   try {
     const list = await listContacts();
     await fsPromises.writeFile(
