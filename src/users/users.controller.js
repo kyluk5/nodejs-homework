@@ -1,5 +1,4 @@
 const contacts = require("../../contacts");
-const uuid = require("uuid");
 
 exports.getContacts = async (req, res, next) => {
   res.status(200).send(await contacts.listContacts());
@@ -14,10 +13,8 @@ exports.getById = async (req, res, next) => {
 };
 
 exports.addNewContact = async (req, res, next) => {
-  const id = uuid.v4();
   const { name, email, phone } = req.body;
-  await contacts.addContact(id, name, email, phone);
-  res.status(201).send({ id, name, email, phone });
+  res.status(201).send(await contacts.addContact(name, email, phone));
 };
 
 exports.deleteContact = async (req, res, next) => {
