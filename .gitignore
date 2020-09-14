@@ -1,2 +1,16 @@
-/node_modules
+# production
+/build
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# dotenv environment variables file
 .env
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
