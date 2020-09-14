@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const uuid = require("uuid");
 
 const { promises: fsPromises } = fs;
 
@@ -11,35 +12,36 @@ async function listContacts() {
 }
 
 async function getContactById(contactId) {
-  try {
-    const list = await listContacts();
-    return list.filter((item) => item.id === contactId);
-  } catch (error) {
-    console.log(error);
-  }
+  const list = await listContacts();
+  return list.filter((item) => item.id === contactId);
 }
 
 async function removeContact(contactId) {
-  try {
-    const list = await listContacts();
-    const result = list.filter((item) => item.id !== contactId);
-    await fsPromises.writeFile(contactsPath, JSON.stringify(result));
-  } catch (error) {
-    console.log(error);
-  }
+  const list = await listContacts();
+  const result = list.filter((item) => item.id !== contactId);
+  await fsPromises.writeFile(contactsPath, JSON.stringify(result));
 }
 
 async function addContact(name, email, phone) {
-  const id = JSON.parse(JSON.stringify(Date.now()).slice(9, 11));
-  try {
-    const list = await listContacts();
-    await fsPromises.writeFile(
-      contactsPath,
-      JSON.stringify([...list, { id, name, email, phone }])
-    );
-  } catch (error) {
-    console.log(error);
+  const id = uuid.v4();
+  const newContact = { id, name, email, phone };
+  const list = await listContacts();
+  await fsPromises.writeFile(
+    contactsPath,
+    JSON.stringify([...list, newContact])
+  );
+  return newContact;
+}
+
+async function updateContact(id, paramsToUpdate) {
+  const list = await listContacts();
+  const contactInd = list.findIndex((user) => user.id === id);
+  if (contactInd === -1) {
+    return null;
   }
+  list[contactInd] = { ...list[contactInd], ...paramsToUpdate };
+  await fsPromises.writeFile(contactsPath, JSON.stringify([...list]));
+  return list[contactInd];
 }
 
 module.exports = {
@@ -47,4 +49,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 };
