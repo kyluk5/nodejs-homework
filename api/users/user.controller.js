@@ -32,14 +32,9 @@ exports.deleteContact = async (req, res, next) => {
 
 exports.changeContact = async (req, res, next) => {
   const contactId = req.params.contactId;
-  const cangedContact = await userModel.findByIdAndUpdate(
+  const cangedContact = await userModel.findContactByIdAndUpdate(
     contactId,
-    {
-      $set: req.body,
-    },
-    {
-      new: true,
-    }
+    req.body
   );
   if (cangedContact) {
     res.status(200).send(cangedContact);
