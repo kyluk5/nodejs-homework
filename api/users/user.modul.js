@@ -35,7 +35,7 @@ async function addContact(name, email, phone) {
 
 async function updateContact(id, paramsToUpdate) {
   const list = await listContacts();
-  const contactInd = list.findIndex((user) => user.id === id);
+  const contactInd = list.findIndex((user) => String(user.id) === id);
   if (contactInd === -1) {
     return null;
   }

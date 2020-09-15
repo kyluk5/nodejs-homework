@@ -1,4 +1,4 @@
-const contacts = require("../../contacts");
+const contacts = require("./user.modul");
 
 exports.getContacts = async (req, res, next) => {
   res.status(200).send(await contacts.listContacts());
@@ -29,7 +29,7 @@ exports.deleteContact = async (req, res, next) => {
 
 exports.changeContact = async (req, res, next) => {
   const cangedContact = await contacts.updateContact(
-    Number(req.params.contactId),
+    req.params.contactId,
     req.body
   );
   if (cangedContact) {
