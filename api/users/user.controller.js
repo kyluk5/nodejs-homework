@@ -1,4 +1,3 @@
-// const model = require("./user.model");
 const userModel = require("./user.model");
 
 exports.getContacts = async (req, res, next) => {
@@ -7,11 +6,12 @@ exports.getContacts = async (req, res, next) => {
 };
 
 exports.getById = async (req, res, next) => {
-  // const contact = await model.getContactById(Number(req.params.contactId));
-  // if (contact.length === 0) {
-  //   return res.status(404).send("Not found");
-  // }
-  // res.status(200).send(contact);
+  const contactId = req.params.contactId;
+  const contact = await userModel.findById(contactId);
+  if (!contact) {
+    return res.status(404).json("Not found");
+  }
+  res.status(200).send(contact);
 };
 
 exports.addNewContact = async (req, res, next) => {
@@ -20,23 +20,30 @@ exports.addNewContact = async (req, res, next) => {
 };
 
 exports.deleteContact = async (req, res, next) => {
-  // const contact = await model.getContactById(Number(req.params.contactId));
-  // if (contact.length > 0) {
-  //   await contacts.removeContact(Number(req.params.contactId));
-  //   res.status(200).send("contact deleted");
-  // } else {
-  //   res.status(404).send("Not found");
-  // }
+  const contactId = req.params.contactId;
+  const deletedContact = await userModel.findByIdAndDelete(contactId);
+  console.log(deletedContact);
+  if (deletedContact) {
+    res.status(200).send("contact deleted");
+  } else {
+    res.status(404).send("Not found");
+  }
 };
 
 exports.changeContact = async (req, res, next) => {
-  // const cangedContact = await model.updateContact(
-  //   req.params.contactId,
-  //   req.body
-  // );
-  // if (cangedContact) {
-  //   res.status(200).send(cangedContact);
-  // } else {
-  //   res.status(404).send("Not found");
-  // }
+  const contactId = req.params.contactId;
+  const cangedContact = await userModel.findByIdAndUpdate(
+    contactId,
+    {
+      $set: req.body,
+    },
+    {
+      new: true,
+    }
+  );
+  if (cangedContact) {
+    res.status(200).send(cangedContact);
+  } else {
+    res.status(404).send("Not found");
+  }
 };
