@@ -35,7 +35,10 @@ module.exports = class CRUDServer {
   }
 
   async initDataBase() {
-    await mongoose.connect(process.env.MONGO_DB_URL);
+    await mongoose.connect(process.env.MONGO_DB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   }
 
   initErrorHandling() {
