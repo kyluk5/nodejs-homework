@@ -4,16 +4,18 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const { userRouter } = require("./users/user.router");
+const mongoose = require("mongoose");
 
 module.exports = class CRUDServer {
   constructor() {
     this.app = null;
   }
 
-  start() {
+  async start() {
     this.initserver();
     this.initMiddlewares();
     this.initRoutes();
+    await this.initDataBase();
     this.initErrorHandling();
     this.startListening();
   }
@@ -30,6 +32,10 @@ module.exports = class CRUDServer {
 
   initRoutes() {
     this.app.use("/api/contacts", userRouter);
+  }
+
+  async initDataBase() {
+    await mongoose.connect(process.env.MONGO_DB_URL);
   }
 
   initErrorHandling() {
