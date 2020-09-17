@@ -9,14 +9,14 @@ exports.getById = async (req, res, next) => {
   const contactId = req.params.contactId;
   const contact = await userModel.findById(contactId);
   if (!contact) {
-    return res.status(404).json("Not found");
+    return res.status(404).send("Not found");
   }
   res.status(200).send(contact);
 };
 
 exports.addNewContact = async (req, res, next) => {
   const newContact = await userModel.create(req.body);
-  res.status(201).json(newContact);
+  res.status(201).send(newContact);
 };
 
 exports.deleteContact = async (req, res, next) => {
