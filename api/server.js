@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const { contactRouter } = require("./contacts/contact.router");
 const mongoose = require("mongoose");
+const { userRouter } = require("./users/user.router");
 
 module.exports = class CRUDServer {
   constructor() {
@@ -32,6 +33,7 @@ module.exports = class CRUDServer {
 
   initRoutes() {
     this.app.use("/api/contacts", contactRouter);
+    this.app.use("/auth", userRouter);
   }
 
   async initDataBase() {
