@@ -7,7 +7,7 @@ const {
   addNewContact,
   deleteContact,
   changeContact,
-} = require("./user.controller");
+} = require("./contact.controller");
 const { validate } = require("../helpers/validate");
 const { runAsyncWrapper } = require("../helpers/AsyncWrapper");
 
@@ -41,4 +41,4 @@ router.patch(
   runAsyncWrapper(changeContact)
 );
 
-exports.userRouter = router;
+exports.contactRouter = router;

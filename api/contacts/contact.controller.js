@@ -1,4 +1,4 @@
-const userModel = require("./user.model");
+const userModel = require("./contact.model");
 
 exports.getContacts = async (req, res, next) => {
   const listContacts = await userModel.find();
