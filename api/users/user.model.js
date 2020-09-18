@@ -16,7 +16,14 @@ async function findUserByEmail(email) {
   return this.find({ email });
 }
 
+async function updateToken(id, newToken) {
+  return this.findByIdAndUpdate(id, {
+    token: newToken,
+  });
+}
+
 userScheme.statics.findUserByEmail = findUserByEmail;
+userScheme.statics.updateToken = updateToken;
 
 const userModel = mongoose.model("User", userScheme);
 module.exports = userModel;

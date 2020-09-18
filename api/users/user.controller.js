@@ -34,6 +34,7 @@ exports.signIn = async (req, res, next) => {
       return res.status(401).send("Email or password is wrong");
     }
     const token = jwt.sign({ id: existUser._id }, process.env.JWT_SECRET);
+    await userModel.updateToken(existUser._id, token);
 
     return res.status(200).send({
       token: token,
