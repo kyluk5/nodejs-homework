@@ -4,17 +4,15 @@ const Joi = require("joi");
 
 const { validate } = require("../helpers/validate");
 const { runAsyncWrapper } = require("../helpers/AsyncWrapper");
-const { addNewUser } = require("./user.controller");
+const { addNewUser, signIn } = require("./user.controller");
 
-const createUserScheme = Joi.object({
+const UserScheme = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
-router.post(
-  "/register",
-  validate(createUserScheme),
-  runAsyncWrapper(addNewUser)
-);
+router.post("/register", validate(UserScheme), runAsyncWrapper(addNewUser));
+
+router.post("/login", validate(UserScheme), runAsyncWrapper(signIn));
 
 exports.userRouter = router;
