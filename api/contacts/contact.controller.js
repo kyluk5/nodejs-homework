@@ -1,8 +1,15 @@
 const contactModel = require("./contact.model");
 
 exports.getContacts = async (req, res, next) => {
-  const listContacts = await contactModel.find();
-  res.status(200).send(listContacts);
+  if (req.query.sub) {
+    const filteredContacts = await contactModel.find({
+      subscription: req.query.sub,
+    });
+    res.status(200).send(filteredContacts);
+  }
+
+  const { docs } = await contactModel.paginate({}, req.query);
+  res.status(200).send(docs);
 };
 
 exports.getById = async (req, res, next) => {
