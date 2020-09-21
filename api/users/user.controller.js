@@ -85,3 +85,8 @@ exports.authorize = async (req, res, next) => {
 
   next();
 };
+
+exports.currentUser = async (req, res, next) => {
+  const user = req.user;
+  res.status(200).send({ email: user.email, subscription: user.subscription });
+};
