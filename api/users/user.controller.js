@@ -90,3 +90,10 @@ exports.currentUser = async (req, res, next) => {
   const user = req.user;
   res.status(200).send({ email: user.email, subscription: user.subscription });
 };
+
+exports.updateSubscription = async (req, res, next) => {
+  await userModel.findByIdAndUpdate(req.user._id, {
+    subscription: "pro",
+  });
+  res.status(200).send("Subscription updated");
+};

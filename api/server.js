@@ -34,7 +34,7 @@ module.exports = class CRUDServer {
   initRoutes() {
     this.app.use("/api/contacts", contactRouter);
     this.app.use("/auth", userRouter);
-    this.app.use("/users/current", userRouter);
+    this.app.use("/users", userRouter);
   }
 
   async initDataBase() {

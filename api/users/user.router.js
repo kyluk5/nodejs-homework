@@ -10,6 +10,7 @@ const {
   authorize,
   logout,
   currentUser,
+  updateSubscription,
 } = require("./user.controller");
 
 const UserScheme = Joi.object({
@@ -23,6 +24,16 @@ router.post("/login", validate(UserScheme), runAsyncWrapper(signIn));
 
 router.post("/logout", runAsyncWrapper(authorize), runAsyncWrapper(logout));
 
-router.get("/", runAsyncWrapper(authorize), runAsyncWrapper(currentUser));
+router.get(
+  "/current",
+  runAsyncWrapper(authorize),
+  runAsyncWrapper(currentUser)
+);
+
+router.patch(
+  "/",
+  runAsyncWrapper(authorize),
+  runAsyncWrapper(updateSubscription)
+);
 
 exports.userRouter = router;
