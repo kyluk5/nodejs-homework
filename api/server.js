@@ -42,6 +42,7 @@ module.exports = class CRUDServer {
       await mongoose.connect(process.env.MONGO_DB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useCreateIndex: true,
       });
     } catch (error) {
       console.log(error);
