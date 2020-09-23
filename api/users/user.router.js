@@ -1,44 +1,39 @@
 const { Router } = require("express");
-const Joi = require("joi");
 const router = Router();
-const {
-  getContacts,
-  getById,
-  addNewContact,
-  deleteContact,
-  changeContact,
-} = require("./user.controller");
+const Joi = require("joi");
+
 const { validate } = require("../helpers/validate");
 const { runAsyncWrapper } = require("../helpers/AsyncWrapper");
+const {
+  addNewUser,
+  signIn,
+  authorize,
+  logout,
+  currentUser,
+  updateSubscription,
+} = require("./user.controller");
 
-const createUserScheme = Joi.object({
-  name: Joi.string().required(),
+const UserScheme = Joi.object({
   email: Joi.string().email().required(),
-  phone: Joi.string().required(),
+  password: Joi.string().required(),
 });
 
-const updataUserScheme = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-}).min(1);
+router.post("/register", validate(UserScheme), runAsyncWrapper(addNewUser));
 
-router.get("/", runAsyncWrapper(getContacts));
+router.post("/login", validate(UserScheme), runAsyncWrapper(signIn));
 
-router.get("/:contactId", runAsyncWrapper(getById));
+router.post("/logout", runAsyncWrapper(authorize), runAsyncWrapper(logout));
 
-router.post(
-  "/",
-  validate(createUserScheme, "missing required name field"),
-  runAsyncWrapper(addNewContact)
+router.get(
+  "/current",
+  runAsyncWrapper(authorize),
+  runAsyncWrapper(currentUser)
 );
 
-router.delete("/:contactId", runAsyncWrapper(deleteContact));
-
 router.patch(
-  "/:contactId",
-  validate(updataUserScheme, "missing fields"),
-  runAsyncWrapper(changeContact)
+  "/",
+  runAsyncWrapper(authorize),
+  runAsyncWrapper(updateSubscription)
 );
 
 exports.userRouter = router;
