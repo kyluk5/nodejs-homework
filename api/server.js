@@ -27,6 +27,7 @@ module.exports = class CRUDServer {
 
   initMiddlewares() {
     this.app.use(express.json());
+    this.app.use(express.static("public"));
     this.app.use(cors());
     this.app.use(morgan("combined"));
   }
