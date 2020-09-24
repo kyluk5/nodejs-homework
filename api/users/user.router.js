@@ -12,13 +12,19 @@ const {
   currentUser,
   updateSubscription,
 } = require("./user.controller");
+const { generateAvatar } = require("../helpers/avatarCreator");
 
 const UserScheme = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
-router.post("/register", validate(UserScheme), runAsyncWrapper(addNewUser));
+router.post(
+  "/register",
+  validate(UserScheme),
+  runAsyncWrapper(generateAvatar),
+  runAsyncWrapper(addNewUser)
+);
 
 router.post("/login", validate(UserScheme), runAsyncWrapper(signIn));
 
