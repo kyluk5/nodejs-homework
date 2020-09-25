@@ -19,12 +19,7 @@ const UserScheme = Joi.object({
   password: Joi.string().required(),
 });
 
-router.post(
-  "/register",
-  validate(UserScheme),
-  runAsyncWrapper(generateAvatar),
-  runAsyncWrapper(addNewUser)
-);
+router.post("/register", validate(UserScheme), runAsyncWrapper(addNewUser));
 
 router.post("/login", validate(UserScheme), runAsyncWrapper(signIn));
 

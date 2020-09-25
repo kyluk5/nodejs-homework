@@ -2,6 +2,7 @@ const userModel = require("./user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UnauthorizedError } = require("../helpers/errors.constructor");
+// const { generateAvatar } = require("../helpers/avatarCreator");
 
 exports.addNewUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -15,6 +16,7 @@ exports.addNewUser = async (req, res, next) => {
     return res.status(409).send("Email in use");
   }
 
+  // console.log(await generateAvatar());
   const newUser = await userModel.create({ email, password: passwordHash });
 
   res.status(201).send({
