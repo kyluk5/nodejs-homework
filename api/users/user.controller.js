@@ -104,3 +104,22 @@ exports.updateSubscription = async (req, res, next) => {
   });
   res.status(200).send("Subscription updated");
 };
+
+exports.updateUserInfo = async (req, res, next) => {
+  const { user } = req;
+  const { file } = req;
+
+  const newImagePath = `http://localhost:3000/images/${file.filename}`;
+
+  const updatedImage = await userModel.findByIdAndUpdate(
+    user._id,
+    {
+      avatarURL: newImagePath,
+    },
+    { new: true }
+  );
+
+  res.status(200).send({
+    avatarURL: updatedImage.avatarURL,
+  });
+};
