@@ -13,7 +13,7 @@ const {
   updateSubscription,
   updateUserInfo,
 } = require("./user.controller");
-const { updateImage, minimizeImage } = require("../helpers/add&minimizeImage");
+const { updateImage } = require("../helpers/add&minimizeImage");
 
 const UserScheme = Joi.object({
   email: Joi.string().email().required(),
@@ -42,7 +42,6 @@ router.patch(
   "/avatars",
   runAsyncWrapper(authorize),
   updateImage,
-  runAsyncWrapper(minimizeImage),
   runAsyncWrapper(updateUserInfo)
 );
 
