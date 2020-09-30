@@ -11,7 +11,9 @@ const {
   logout,
   currentUser,
   updateSubscription,
+  updateUserInfo,
 } = require("./user.controller");
+const { updateImage } = require("../helpers/add&minimizeImage");
 
 const UserScheme = Joi.object({
   email: Joi.string().email().required(),
@@ -34,6 +36,13 @@ router.patch(
   "/",
   runAsyncWrapper(authorize),
   runAsyncWrapper(updateSubscription)
+);
+
+router.patch(
+  "/avatars",
+  runAsyncWrapper(authorize),
+  updateImage,
+  runAsyncWrapper(updateUserInfo)
 );
 
 exports.userRouter = router;
