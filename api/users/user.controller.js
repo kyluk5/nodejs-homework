@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 const { UnauthorizedError } = require("../helpers/errors.constructor");
 const { generateAvatar } = require("../helpers/avatarCreator");
 const uuid = require("uuid");
+const sgMail = require("@sendgrid/mail");
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 exports.addNewUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -19,11 +22,13 @@ exports.addNewUser = async (req, res, next) => {
 
   const avatarName = await generateAvatar();
   const avatarPath = `http://localhost:${process.env.PORT}/images/${avatarName}`;
+  const verificationToken = uuid.v4();
 
   const newUser = await userModel.create({
     email,
     password: passwordHash,
     avatarURL: avatarPath,
+    verificationToken,
   });
 
   res.status(201).send({
@@ -130,8 +135,25 @@ exports.updateUserInfo = async (req, res, next) => {
 };
 
 exports.sendVerificationEmail = async (req, res, next) => {
-  const verificationToken = uuid.v4();
-  await userModel.findByIdAndUpdate(req.user._id, {
-    verificationToken,
-  });
+  const { email } = req.user;
+  const { verificationToken } = req.user;
+
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: email, // Change to your recipient
+    from: "kyluk5@gmail.com", // Change to your verified sender
+    subject: "Homework Node.js",
+    text: "Verification test",
+    html: `<a href='http://localhost:3000/auth/verify/${verificationToken}'>For verify your account, please follow this link</a>`,
+  };
+
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
