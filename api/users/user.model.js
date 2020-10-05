@@ -11,6 +11,7 @@ const userScheme = new Schema({
     default: "free",
   },
   token: { type: String },
+  verificationToken: { type: String, required: false },
 });
 
 async function findUserByEmail(email) {

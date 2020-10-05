@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UnauthorizedError } = require("../helpers/errors.constructor");
 const { generateAvatar } = require("../helpers/avatarCreator");
+const uuid = require("uuid");
 
 exports.addNewUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -18,6 +19,7 @@ exports.addNewUser = async (req, res, next) => {
 
   const avatarName = await generateAvatar();
   const avatarPath = `http://localhost:${process.env.PORT}/images/${avatarName}`;
+
   const newUser = await userModel.create({
     email,
     password: passwordHash,
@@ -30,6 +32,9 @@ exports.addNewUser = async (req, res, next) => {
       subscription: newUser.subscription,
     },
   });
+
+  req.user = newUser;
+  next();
 };
 
 exports.signIn = async (req, res, next) => {
@@ -121,5 +126,12 @@ exports.updateUserInfo = async (req, res, next) => {
 
   res.status(200).send({
     avatarURL: updatedImage.avatarURL,
+  });
+};
+
+exports.sendVerificationEmail = async (req, res, next) => {
+  const verificationToken = uuid.v4();
+  await userModel.findByIdAndUpdate(req.user._id, {
+    verificationToken,
   });
 };
