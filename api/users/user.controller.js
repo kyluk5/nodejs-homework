@@ -161,7 +161,7 @@ exports.sendVerificationEmail = async (req, res, next) => {
 exports.checkVerification = async (req, res, next) => {
   const verificationToken = req.params.verificationToken;
 
-  const verifiedUser = userModel.findOneAndUpdate(
+  const verifiedUser = await userModel.findOneAndUpdate(
     { verificationToken },
     { verificationToken: null }
   );
