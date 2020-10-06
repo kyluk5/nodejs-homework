@@ -13,6 +13,7 @@ const {
   updateSubscription,
   updateUserInfo,
   sendVerificationEmail,
+  checkVerification,
 } = require("./user.controller");
 const { updateImage } = require("../helpers/add&minimizeImage");
 
@@ -51,6 +52,6 @@ router.patch(
   runAsyncWrapper(updateUserInfo)
 );
 
-router.get("/verify/:verificationToken");
+router.get("/verify/:verificationToken", runAsyncWrapper(checkVerification));
 
 exports.userRouter = router;

@@ -142,10 +142,10 @@ exports.sendVerificationEmail = async (req, res, next) => {
 
   const msg = {
     to: email, // Change to your recipient
-    from: "kyluk5@gmail.com", // Change to your verified sender
+    from: process.env.SENDGRID_SENDER, // Change to your verified sender
     subject: "Homework Node.js",
     text: "Verification test",
-    html: `<a href='http://localhost:3000/auth/verify/${verificationToken}'>For verify your account, please follow this link</a>`,
+    html: `<p>For verify your account, please follow this <a href='http://localhost:3000/auth/verify/${verificationToken}'>link</a></p> `,
   };
 
   sgMail
@@ -156,4 +156,19 @@ exports.sendVerificationEmail = async (req, res, next) => {
     .catch((error) => {
       console.error(error);
     });
+};
+
+exports.checkVerification = async (req, res, next) => {
+  const verificationToken = req.params.verificationToken;
+
+  const verifiedUser = userModel.findOneAndUpdate(
+    { verificationToken },
+    { verificationToken: null }
+  );
+
+  if (verifiedUser) {
+    return res.status(200).send();
+  } else {
+    return res.status(404).send("User not found");
+  }
 };
