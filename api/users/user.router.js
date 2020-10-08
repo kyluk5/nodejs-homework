@@ -12,7 +12,6 @@ const {
   currentUser,
   updateSubscription,
   updateUserInfo,
-  sendVerificationEmail,
   checkVerification,
 } = require("./user.controller");
 const { updateImage } = require("../helpers/add&minimizeImage");
@@ -22,12 +21,7 @@ const UserScheme = Joi.object({
   password: Joi.string().required(),
 });
 
-router.post(
-  "/register",
-  validate(UserScheme),
-  runAsyncWrapper(addNewUser),
-  runAsyncWrapper(sendVerificationEmail)
-);
+router.post("/register", validate(UserScheme), runAsyncWrapper(addNewUser));
 
 router.post("/login", validate(UserScheme), runAsyncWrapper(signIn));
 

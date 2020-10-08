@@ -31,15 +31,24 @@ exports.addNewUser = async (req, res, next) => {
     verificationToken,
   });
 
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: email, // Change to your recipient
+    from: process.env.SENDGRID_SENDER, // Change to your verified sender
+    subject: "Homework Node.js",
+    text: "Verification test",
+    html: `<p>For verify your account, please follow this <a href='http://localhost:3000/auth/verify/${verificationToken}'>link</a></p> `,
+  };
+
+  sgMail.send(msg);
+
   res.status(201).send({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
     },
   });
-
-  req.user = newUser;
-  next();
 };
 
 exports.signIn = async (req, res, next) => {
@@ -132,30 +141,6 @@ exports.updateUserInfo = async (req, res, next) => {
   res.status(200).send({
     avatarURL: updatedImage.avatarURL,
   });
-};
-
-exports.sendVerificationEmail = async (req, res, next) => {
-  const { email } = req.user;
-  const { verificationToken } = req.user;
-
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-  const msg = {
-    to: email, // Change to your recipient
-    from: process.env.SENDGRID_SENDER, // Change to your verified sender
-    subject: "Homework Node.js",
-    text: "Verification test",
-    html: `<p>For verify your account, please follow this <a href='http://localhost:3000/auth/verify/${verificationToken}'>link</a></p> `,
-  };
-
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
 };
 
 exports.checkVerification = async (req, res, next) => {
